@@ -6,6 +6,7 @@ package edu.neu.coe.info6205.randomwalk;
 
 import edu.neu.coe.info6205.util.PrivateMethodTester;
 import org.junit.Test;
+import edu.neu.coe.info6205.randomwalk.RandomWalk;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotSame;

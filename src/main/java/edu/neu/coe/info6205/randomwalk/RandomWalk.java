@@ -4,6 +4,9 @@
 
 package edu.neu.coe.info6205.randomwalk;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Random;
 
 public class RandomWalk {
@@ -21,7 +24,8 @@ public class RandomWalk {
      */
     private void move(int dx, int dy) {
         // FIXME do move by replacing the following code
-         throw new RuntimeException("Not implemented");
+         x += dx;
+         y += dy;
         // END 
     }
 
@@ -32,6 +36,9 @@ public class RandomWalk {
      */
     private void randomWalk(int m) {
         // FIXME
+        while(m-- > 0){
+            randomMove();
+        }
         // END 
     }
 
@@ -52,8 +59,18 @@ public class RandomWalk {
      */
     public double distance() {
         // FIXME by replacing the following code
-         return 0.0;
+         return Math.sqrt(x*x + y*y);
         // END 
+    }
+    /**
+     * Method to compute the squared distance from the origin (the lamp-post where the drunkard starts) to his current position.
+     *
+     * @return the (Euclidean) squared distance from the origin to the current position.
+     */
+    public double squaredDistance() {
+        // FIXME by replacing the following code
+        return x*x + y*y;
+        // END
     }
 
     /**
@@ -73,14 +90,47 @@ public class RandomWalk {
         return totalDistance / n;
     }
 
-    public static void main(String[] args) {
-        if (args.length == 0)
-            throw new RuntimeException("Syntax: RandomWalk steps [experiments]");
-        int m = Integer.parseInt(args[0]);
-        int n = 30;
-        if (args.length > 1) n = Integer.parseInt(args[1]);
-        double meanDistance = randomWalkMulti(m, n);
-        System.out.println(m + " steps: " + meanDistance + " over " + n + " experiments");
+    /**
+     * Perform multiple random walk experiments, returning the mean squared distance.
+     *
+     * @param m the number of steps for each experiment
+     * @param n the number of experiments to run
+     * @return the mean squared distance
+     */
+    public static double randomWalkMultiSquaredDistance(int m, int n) {
+        double totalSquaredDistance = 0;
+        for (int i = 0; i < n; i++) {
+            RandomWalk walk = new RandomWalk();
+            walk.randomWalk(m);
+            totalSquaredDistance = totalSquaredDistance + walk.squaredDistance();
+        }
+        return totalSquaredDistance / n;
+    }
+
+    public static void main(String[] args) throws IOException {
+//        if (args.length == 0)
+//            throw new RuntimeException("Syntax: RandomWalk steps [experiments]");
+//        int m = Integer.parseInt(args[0]);
+//        int n = 30;
+//        if (args.length > 1) n = Integer.parseInt(args[1])
+        BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+        System.out.print("Please enter different values of 'm' separated by ',' : ");
+        String[] stepsArr = br.readLine().split(",");
+        System.out.println("____Mean distance vs steps____");
+        for(String step : stepsArr){
+            int m = Integer.parseInt(step);
+            int n = 100000;
+            double meanDistance = randomWalkMulti(m, n);
+            System.out.println(m + " steps: " + meanDistance + " over " + n + " experiments");
+        }
+        System.out.println();
+        System.out.println("____Mean squared distance vs steps____");
+        for(String step : stepsArr){
+            int m = Integer.parseInt(step);
+            int n = 100000;
+            double meanSquaredDistance = randomWalkMultiSquaredDistance(m, n);
+            System.out.println(m + " steps: " + meanSquaredDistance + "(mean squared distance) over " + n + " experiments");
+        }
     }
 
 }
