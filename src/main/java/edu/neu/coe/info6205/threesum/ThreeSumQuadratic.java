@@ -1,6 +1,7 @@
 package edu.neu.coe.info6205.threesum;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,6 +39,20 @@ public class ThreeSumQuadratic implements ThreeSum {
     public List<Triple> getTriples(int j) {
         List<Triple> triples = new ArrayList<>();
         // FIXME : for each candidate, test if a[i] + a[j] + a[k] = 0.
+        // Provided array is sorted in asc order, allowing degrees of freedom to apply the spread from center approach
+        // the spread from center approach will result in duplicate triplets, but the stream().distinct() in parent function resolves this
+        int i = j - 1, k = j + 1;
+        int sum = -1; // initialize triplet sum with dummy value to be updated in loop
+        while(i >= 0 && k <= length - 1){
+            sum = a[i] + a[j] + a[k]; // 2 conditions using sum, store in var for reduced array access
+            if(sum > 0){i--;} // try to compensate with lower value : decrement i
+            else if(sum < 0){k++;} // try to compensate with bigger value : increment k
+            else{
+                triples.add(new Triple(a[i], a[j], a[k])); // valid triplet found
+                i--; // more triplets with same center point could  continue to spread out
+                k++;
+            }
+        }
         // END 
         return triples;
     }
