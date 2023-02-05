@@ -57,7 +57,21 @@ public class Timer {
     public <T, U> double repeat(int n, Supplier<T> supplier, Function<T, U> function, UnaryOperator<T> preFunction, Consumer<U> postFunction) {
         logger.trace("repeat: with " + n + " runs");
         // FIXME: note that the timer is running when this method is called and should still be running when it returns. by replacing the following code
-         return 0;
+        pause(); // timer is running (resumed); pause to not time pre-processing of input
+        while(n-- > 0){ // while all runs are not finished
+            T input = supplier.get(); // get the study input
+            if(preFunction != null)
+                preFunction.apply(input); // pre-process input if preFunction exists
+
+            resume(); // resume timer
+            U input_processed = function.apply(input); // get processed input for possible post-processing
+            pauseAndLap(); // lap and pause to get effective time to run 'function'
+            if(postFunction != null)
+                postFunction.accept(input_processed); // post-process input if post-processing function exists
+        }
+        final double result = meanLapTime();
+        resume(); // resume timer before returning
+        return result;
         // END 
     }
 
@@ -177,7 +191,7 @@ public class Timer {
      */
     private static long getClock() {
         // FIXME by replacing the following code
-         return 0;
+         return System.nanoTime(); // returning time in nano-seconds as unit for ticks is defined as nano-seconds
         // END 
     }
 
@@ -190,7 +204,8 @@ public class Timer {
      */
     private static double toMillisecs(long ticks) {
         // FIXME by replacing the following code
-         return 0;
+        // There is scope for ticks to go out of bounds of long (9.2 * 10^18), but this will only happen if time is recorded for 2,562,047 hours which is impractical.
+         return ticks/1000000.0; // return milliseconds by dividing with decimal to implicitly cast to double
         // END 
     }
 

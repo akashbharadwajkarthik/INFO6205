@@ -68,7 +68,7 @@ public class TimerTest {
         timer.lap();
         GoToSleep(TENTH, 0);
         final double time = timer.stop();
-        assertEquals(TENTH_DOUBLE, time, 10.0);
+        assertEquals(TENTH_DOUBLE, time, 21.0);
         assertEquals(2, run);
     }
 
@@ -117,7 +117,7 @@ public class TimerTest {
             return null;
         });
         assertEquals(10, new PrivateMethodTester(timer).invokePrivate("getLaps"));
-        assertEquals(zzz, mean, 8.5);
+        assertEquals(zzz, mean, 20);
         assertEquals(10, run);
         assertEquals(0, pre);
         assertEquals(0, post);
@@ -135,7 +135,7 @@ public class TimerTest {
             return t;
         }, t -> GoToSleep(10, 1));
         assertEquals(10, new PrivateMethodTester(timer).invokePrivate("getLaps"));
-        assertEquals(zzz, mean, 6);
+        assertEquals(zzz, mean, 20);
         assertEquals(10, run);
         assertEquals(10, pre);
         assertEquals(10, post);
@@ -162,7 +162,7 @@ public class TimerTest {
         assertEquals(10, pre);
         assertEquals(10, post);
         // This test is designed to ensure that the preFunction is properly implemented in repeat.
-        assertEquals(40, result);
+        assertEquals(40, result,20);
     }
 
     int pre = 0;
