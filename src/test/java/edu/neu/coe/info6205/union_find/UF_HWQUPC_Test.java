@@ -6,7 +6,6 @@ package edu.neu.coe.info6205.union_find;
 
 import edu.neu.coe.info6205.util.PrivateMethodTester;
 import org.junit.Test;
-
 import static org.junit.Assert.*;
 
 public class UF_HWQUPC_Test {
